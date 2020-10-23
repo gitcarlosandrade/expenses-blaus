@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:expenses/components/chart.dart';
 import 'package:expenses/components/transaction_form.dart';
 import 'package:expenses/components/transaction_list.dart';
 import 'package:expenses/models/transactions.dart';
@@ -42,17 +43,29 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
-    // Transaction(
-    //     id: 't1',
-    //     title: 'Novo tenis de corrida',
-    //     value: 310.76,
-    //     date: DateTime.now()),
-    // Transaction(
-    //     id: 't2',
-    //     title: 'Remédio de dor muscular',
-    //     value: 70.00,
-    //     date: DateTime.now()),
+    Transaction(
+        id: 't0',
+        title: 'Conta antiga',
+        value: 310.76,
+        date: DateTime.now().subtract(Duration(days: 33))),
+    Transaction(
+        id: 't1',
+        title: 'Novo tenis de corrida',
+        value: 310.76,
+        date: DateTime.now().subtract(Duration(days: 3))),
+    Transaction(
+        id: 't2',
+        title: 'Remédio de dor muscular',
+        value: 70.00,
+        date: DateTime.now().subtract(Duration(days: 4))),
   ];
+
+  List<Transaction> get recentTransactions {
+    return _transactions
+        .where((element) =>
+            element.date.isAfter(DateTime.now().subtract(Duration(days: 7))))
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Card(
-            elevation: 4,
-            child: Text("grafico"),
-          ),
+          Chart(recentTransactions),
           TransactionList(_transactions),
         ],
       ),
